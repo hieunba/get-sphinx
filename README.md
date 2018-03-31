@@ -15,3 +15,5 @@ Windows 64 bit
 ### Tested
 
 - Windows 2012 R2 64 bit
+- Windows 10 Professional 64 bit
+- Windows 7 Professional 64 bit
