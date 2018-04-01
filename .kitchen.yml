@@ -4,6 +4,7 @@ driver:
 
 provisioner:
   name: shell
+  script: ./scripts/install.ps1
 
 platforms:
   - name: windows-2012R2
