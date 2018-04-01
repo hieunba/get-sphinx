@@ -1,5 +1,4 @@
-####################
-Set-ExecutionPolicy Unrestricted
+
 
  ######################################
  # Configuration parameters           #
