@@ -1,3 +1,14 @@
+#################################################
+#
+# Install sphinx + MikTex
+#
+# Maintainer Nghiem Ba Hieu
+#
+# Copyright, 2018, Apache License, Version 2.0
+#
+# Supports Windows x86_64
+#
+#################################################
 
 
  ######################################
