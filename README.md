@@ -17,3 +17,9 @@ Windows 64 bit
 - Windows 2012 R2 64 bit
 - Windows 10 Professional 64 bit
 - Windows 7 Professional 64 bit
+
+## How to use?
+
+Assuming we are in repository directory, to install Sphinx using install.ps1, please use the following command:
+
+```   powershell.exe -NoProfile -ExecutionPolicy ByPass .\scripts\install.ps1   ```
