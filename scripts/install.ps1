@@ -54,7 +54,7 @@ function Install-MikTex {
         $miktex_download_path = "$env:TMP\basic-miktex-setup.exe"
         if (-Not (Test-Path $miktex_download_path))
         {
-            Write-Host "Downloading MiKTeX installation binary.." -ForegroundColor Magenta
+            Write-Host "Downloading MiKTeX installation binary..." -ForegroundColor Magenta
             (New-Object System.Net.WebClient).DownloadFile($miktex_amd64_setup_url, $miktex_download_path)
         }
         else
@@ -65,11 +65,11 @@ function Install-MikTex {
             }
             else
             {
-                Write-Host "Checksum mismatched. Redownloading MiKTeX installation binary.. " -ForegroundColor Magenta
+                Write-Host "Checksum mismatched. Redownloading MiKTeX installation binary... " -ForegroundColor Magenta
                 (New-Object System.Net.WebClient).DownloadFile($miktex_amd64_setup_url, $miktex_download_path)
             }
         }
-        Write-Host "Installng MikTex.." -ForegroundColor Magenta
+        Write-Host "Installng MikTex..." -ForegroundColor Magenta
         Start-Process $miktex_download_path -ArgumentList @('--unattended', '--auto-install=yes') -Wait
     }
     else
@@ -81,7 +81,7 @@ function Install-MikTex {
 
         if ($deploy_setup_path) {
             if (-Not ((Get-FileHash $deploy_setup_path -Algorithm SHA256) -eq $deploy_setup_checksum)) {
-                Write-Host "Downloading MikTex deploy utility.." -ForegroundColor Magenta
+                Write-Host "Downloading MikTex deploy utility..." -ForegroundColor Magenta
                 (New-Object System.Net.WebClient).DownloadFile($deploy_setup_url, $deploy_setup_path)
             }
             else
@@ -112,6 +112,7 @@ function Test-RegistryKeyValue
 
     Returns `True` if `hklm:\Software\Carbon\Test` contains a value named 'Title'.  `False` otherwise.
 
+    .EXAMPLE
     Test-RegistryKeyValue -Path `hklm:\Software\Microsoft\Windows\CurrentVersion\Uninstall\Milk` -Name `Milk`
 
     Returns `True` if `hklm:\Software\Microsoft\Windows\CurrentVersion\Uninstall\Milk` or
@@ -179,7 +180,7 @@ function Install-Python {
   foreach ($member in $products) { if ($member.Name -like "Python $version Exe*") { $python3_installed = $true } }
 
   if (-Not $python3_installed) {
-    Write-Host "Python was missing. Install python $version ..." -ForegroundColor Magenta
+    Write-Host "Python was missing. Install python $version..." -ForegroundColor Magenta
     Start-Process $python_download_path -ArgumentList @('/quiet', "InstallAllUsers=1 PrependPath=1 Include_test=0") -Wait
   }
 }
