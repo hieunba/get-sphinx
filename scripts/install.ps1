@@ -1,30 +1,27 @@
-#################################################
-#
-# Install sphinx + MikTex
-#
-# Maintainer Nghiem Ba Hieu
-#
-# Copyright, 2018, Apache License, Version 2.0
-#
-# Supports Windows x86_64
-#
-#################################################
+<#
+  .SYNOPSIS
+  Install Sphinx + MiKTeK
+
+  .DESCRIPTION
+  Install Sphinx based on Python 3.x and add MiKTeX to support LaTex.
+
+  .EXAMPLE
+  install.ps1
+
+  .EXAMPEL
+  install.ps1 -pythonVersion '3.6.5'
+
+#>
+param(
+  [string]$pythonVersion = '3.6.5'
+)
 
 
- ######################################
- # Configuration parameters           #
- ######################################
+######################################
+# Configuration parameters           #
+######################################
 
- ######################################
- # Notes                              #
- ######################################
- # ez_setup.py used to install easy_install which is hosted at https://bootstrap.pypa.io/ez_setup.py
- # Due to the implementation of TLS v1.2, then need to upload to Dropbox
- $arch = $env:PROCESSOR_ARCHITECTURE.ToLower()
- $py27_dir = "C:\Python27"
- $py27_exe_path = "$py27_dir\python.exe"
- $easy_install_exe_path = "$py27_dir\Scripts\easy_install.exe"
- $default_download_path = $env:TMP
+$arch = $env:PROCESSOR_ARCHITECTURE.ToLower()
 
 function Install-MikTex {
     <#
@@ -38,15 +35,13 @@ function Install-MikTex {
     Install-MikTex
 
     #>
-    [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$false)]
         [Boolean]
         $Source = $false,
-        [Parameter(Mandatory=$false)]
         [String]
         $Repository = "$env:TMP\miktex"
     )
+
     $miktex_reg_path = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MikTex 2.9'
     if (Test-RegistryKeyValue -Path $miktex_reg_path -Name 'MikTex 2.9') {
         Write-Host "MikTex 2.9 installed." -ForegroundColor Magenta
@@ -57,22 +52,25 @@ function Install-MikTex {
         $miktex_amd64_setup_url = 'https://www.dropbox.com/s/vj2g3c4hih8gabb/basic-miktex-2.9.6643-x64.exe?dl=1'
         $miktex_amd64_setup_checksum = '792983b8945ddafc5285cb9942d9d88550ef3af0f8d4add9acd057233ff84584'
         $miktex_download_path = "$env:TMP\basic-miktex-setup.exe" 
-
-        if ($arch -eq 'amd64') {
+        if (-Not (Test-Path $miktex_download_path)) 
+        {
+            Write-Host "Downloading MiKTeX installation binary.." -ForegroundColor Magenta
+            (New-Object System.Net.WebClient).DownloadFile($miktex_amd64_setup_url, $miktex_download_path)
+        }
+        else
+        {
             $fileHash = Get-FileHash $miktex_download_path -Algorithm SHA256
             if ($fileHash -eq $miktex_amd64_setup_checksum) {
-                Write-Host "MixTek installation binary staged. Skip downloading." -ForegroundColor Yellow
-            } else 
+                Write-Host "MiKTeX installation binary staged. Skip downloading." -ForegroundColor Yellow
+            } 
+            else 
             {
+                Write-Host "Checksum mismatched. Redownloading MiKTeX installation binary.. " -ForegroundColor Magenta
                 (New-Object System.Net.WebClient).DownloadFile($miktex_amd64_setup_url, $miktex_download_path)
             }
-            Write-Host "Installng MikTex.." -ForegroundColor Magenta
-            Start-Process $miktex_download_path -ArgumentList @('--unattended', '--auto-install=yes') -Wait
         }
-        else 
-        {
-            Write-Host "MikTex does not support $env:PROCESSOR_ARCHITECTURE platform." -ForegroundColor Yellow
-        }
+        Write-Host "Installng MikTex.." -ForegroundColor Magenta
+        Start-Process $miktex_download_path -ArgumentList @('--unattended', '--auto-install=yes') -Wait
     }
     else 
     {
@@ -165,87 +163,31 @@ function Test-RegistryKeyValue
 }
 
 function Install-Python {
-  <#
-  .SYNOPSIS
-  Install Python for Windows and install easy_install
 
-  .DESCRIPTION
-  By default, installing Pyhon 2.7.14 if no version was specified
+  $version = $pythonVersion
 
-  .EXAMPLE
-  Install-Python
-
-  #>
-
-  [CmdletBinding()]
-  param(
-      [Parameter(Mandatory=$false)]
-      [string]
-      $version = "2.7.14"
-  )
-
-  $python_exe_path      = "C:\Python27\python.exe"
-  $python_download_url  = "https://www.python.org/ftp/python/$version/python-$version.$arch.msi"
-  $python_download_path = "$env:TMP\python-$version.$arch.msi"
+  $python_exe_path 	  = "$env:PROGRAMFILES\Python36\python.exe"
+  $python_download_url  = "https://www.python.org/ftp/python/$version/python-$version-$arch.exe"
+    $python_download_path = "$env:TMP\python-$version-$arch.exe"
 
   if (-Not (Test-Path $python_download_path)) {
     (New-Object System.Net.WebClient).DownloadFile($python_download_url, $python_download_path)
   }
  
-  Get-Python-Setup-Files
+  $products = Get-WmiObject -Class Win32_Product
 
-  foreach ($member in (Get-WmiObject -Class Win32_Product)) { if ($member.Name -like '*Python*') { $python_installed = $true } }
+  foreach ($member in $products) { if ($member.Name -like "Python $version Exe*") { $python3_installed = $true } }
 
-  if (-Not $python_installed) {
-    Start-Process msiexec.exe -ArgumentLIst @('/q', "/i $python_download_path") -Wait
-  }
-  if (-Not (Test-Path $easy_install_exe_path)) {
-    Start-Process python.exe -ArgumentList @("$Location\ez_setup.py") -Wait
+  if (-Not $python3_installed) {
+    Write-Host "Python was missing. Install python $version ..." -ForegroundColor Magenta
+    Start-Process $python_download_path -ArgumentList @('/quiet', "InstallAllUsers=1 PrependPath=1 Include_test=0") -Wait
   }
 }
 
 function Install-Sphinx {
-  if (-Not (Test-Path $py27_exe_path)) {
-    Write-Host "Python was missing. Installing it.." -ForegroundColor Magenta
-    Install-Python
-  }
-  # Environment is not populated at this session
-  if (Test-Path $easy_install_exe_path) {
-    Start-Process $easy_install_exe_path -ArgumentList @('sphinx') -Wait
-  } 
-  else 
-  {
-    Write-Host "easy_install was not found. Please install it first." -ForegroundColor Red
-  }
+  $easy_install_exe_path = "$env:PROGRAMFILES\Python36\Scripts\easy_install.exe"
+  Start-Process $easy_install_exe_path -ArgumentList @('sphinx') -Wait
 }
-
-function Get-Python-Setup-Files {
-    <#
-    .SYNOPSIS
-    Get Python setup files
-
-    .DESCRIPTION
-    Python setup files include ez_setup.py and get-pip.py. They are fetched from Internet and stores to TMP dir
-
-    .EXAMPLE
-    Get-Python-Setup-Files
-    #>
-    $easy_setup_url = "https://www.dropbox.com/s/14vztnkqf4ayhp3/ez_setup.py?dl=1"
-    $get_pip_url = "https://raw.github.com/pypa/pip/master/contrib/get-pip.py"
-
-    (New-Object System.Net.WebClient).DownloadFile($easy_setup_url, "$default_download_path\ez_setup.py")
-    (New-Object System.Net.WebClient).DownloadFile($get_pip_url, "$default_download_path\get-pip.py")
-    
-    # If IE engine is available, can use Invoke-WebRequest to fetch file
-    # but to be safe, using .Net framework one.
-    #    Invoke-WebRequest -Uri $ez_setup_url -OutFile "distribute_setup.py"
-}
-
-# Prepare
-if (-Not ([Environment]::GetEnvironmentVariable("Path") | Select-String Python27)) {
-  [Environment]::SetEnvironmentVariable("Path", "$env:Path;C:\Python27;C:\Python27\Scripts\", "Machine")
-}
-
 
 # Start
 Install-Python
