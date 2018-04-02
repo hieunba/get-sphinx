@@ -8,7 +8,7 @@
   .EXAMPLE
   install.ps1
 
-  .EXAMPEL
+  .EXAMPLE
   install.ps1 -pythonVersion '3.6.5'
 
 #>
@@ -51,8 +51,8 @@ function Install-MikTex {
     if (-Not $Source) {
         $miktex_amd64_setup_url = 'https://www.dropbox.com/s/vj2g3c4hih8gabb/basic-miktex-2.9.6643-x64.exe?dl=1'
         $miktex_amd64_setup_checksum = '792983b8945ddafc5285cb9942d9d88550ef3af0f8d4add9acd057233ff84584'
-        $miktex_download_path = "$env:TMP\basic-miktex-setup.exe" 
-        if (-Not (Test-Path $miktex_download_path)) 
+        $miktex_download_path = "$env:TMP\basic-miktex-setup.exe"
+        if (-Not (Test-Path $miktex_download_path))
         {
             Write-Host "Downloading MiKTeX installation binary.." -ForegroundColor Magenta
             (New-Object System.Net.WebClient).DownloadFile($miktex_amd64_setup_url, $miktex_download_path)
@@ -62,8 +62,8 @@ function Install-MikTex {
             $fileHash = Get-FileHash $miktex_download_path -Algorithm SHA256
             if ($fileHash -eq $miktex_amd64_setup_checksum) {
                 Write-Host "MiKTeX installation binary staged. Skip downloading." -ForegroundColor Yellow
-            } 
-            else 
+            }
+            else
             {
                 Write-Host "Checksum mismatched. Redownloading MiKTeX installation binary.. " -ForegroundColor Magenta
                 (New-Object System.Net.WebClient).DownloadFile($miktex_amd64_setup_url, $miktex_download_path)
@@ -72,13 +72,13 @@ function Install-MikTex {
         Write-Host "Installng MikTex.." -ForegroundColor Magenta
         Start-Process $miktex_download_path -ArgumentList @('--unattended', '--auto-install=yes') -Wait
     }
-    else 
+    else
     {
-  
+
         $deploy_setup_url = 'https://www.dropbox.com/s/aavayoshtp2kzp0/miktexsetup.amd64.exe?dl=1'
         $deploy_setup_checksum = 'da42decf97617682c5a02b84260c46bb80b9ff9cd26e365ab0c0d9619c38387c'
         $deploy_setup_path = "$env:TMP\miktex_deploy.exe"
- 
+
         if ($deploy_setup_path) {
             if (-Not ((Get-FileHash $deploy_setup_path -Algorithm SHA256) -eq $deploy_setup_checksum)) {
                 Write-Host "Downloading MikTex deploy utility.." -ForegroundColor Magenta
@@ -88,13 +88,13 @@ function Install-MikTex {
             {
                 Write-Host "MikTek deploy utility staged. Skipped downloading."
             }
-        }    
-      
+        }
+
         Write-Host "Preparing MikTek local repository at $Repository" -ForeGroundColor Magenta
         Start-Process $deploy_setup_path -ArgumentList @('--verbose', "--local-package-repository=$Repository --package-set=complete download") -Wait
         Write-Host "Installing MikTek from local repository..." -ForeGroundColor Magenta
         Start-Process $deploy_setup_path -ArgumentList @('--quiet', "--local-package-repository=$Repository --package-set=basic install") -Wait
-  
+
     }
 }
 
@@ -114,11 +114,11 @@ function Test-RegistryKeyValue
 
     Test-RegistryKeyValue -Path `hklm:\Software\Microsoft\Windows\CurrentVersion\Uninstall\Milk` -Name `Milk`
 
-    Returns `True` if `hklm:\Software\Microsoft\Windows\CurrentVersion\Uninstall\Milk` or 
+    Returns `True` if `hklm:\Software\Microsoft\Windows\CurrentVersion\Uninstall\Milk` or
     if it contains `DisplayName` has a value of 'Milk'. `False` otherwise.
 
     .DERIVE
-    This was referred to the work of Aaron Jensen on stackoverflow, or at 
+    This was referred to the work of Aaron Jensen on stackoverflow, or at
     https://stackoverflow.com/questions/5648931/test-if-registry-value-exists#5652674
     #>
     [CmdletBinding()]
@@ -139,7 +139,7 @@ function Test-RegistryKeyValue
         return $false
     }
 
-    $properties = Get-ItemProperty -Path $Path 
+    $properties = Get-ItemProperty -Path $Path
     if( -not $properties )
     {
         return $false
@@ -173,7 +173,7 @@ function Install-Python {
   if (-Not (Test-Path $python_download_path)) {
     (New-Object System.Net.WebClient).DownloadFile($python_download_url, $python_download_path)
   }
- 
+
   $products = Get-WmiObject -Class Win32_Product
 
   foreach ($member in $products) { if ($member.Name -like "Python $version Exe*") { $python3_installed = $true } }
