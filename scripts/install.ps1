@@ -163,7 +163,7 @@ function Test-RegistryKeyValue
 
 }
 
-fucntion Find-Python {
+function Find-Python {
   $python365IdentifyingNumber = '{B145D381-BCBE-408A-BDFA-0871790EC59D}'
   $products = Get-WmiObject -Class Win32_Product
 
