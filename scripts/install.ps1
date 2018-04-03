@@ -163,23 +163,33 @@ function Test-RegistryKeyValue
 
 }
 
+fucntion Find-Python {
+  $python365IdentifyingNumber = '{B145D381-BCBE-408A-BDFA-0871790EC59D}'
+  $products = Get-WmiObject -Class Win32_Product
+
+  $pythonThere = $false
+
+  foreach ($member in $products)
+  {
+    if ($member.IdentifyingNumber -eq $python365IdentifyingNumber) { $pythonThere = $true }
+  }
+
+  return $pythonThere
+}
+
 function Install-Python {
 
   $version = $pythonVersion
 
   $python_exe_path 	  = "$env:PROGRAMFILES\Python36\python.exe"
   $python_download_url  = "https://www.python.org/ftp/python/$version/python-$version-$arch.exe"
-    $python_download_path = "$env:TMP\python-$version-$arch.exe"
+  $python_download_path = "$env:TMP\python-$version-$arch.exe"
 
   if (-Not (Test-Path $python_download_path)) {
     (New-Object System.Net.WebClient).DownloadFile($python_download_url, $python_download_path)
   }
-
-  $products = Get-WmiObject -Class Win32_Product
-
-  foreach ($member in $products) { if ($member.Name -like "Python $version Exe*") { $python3_installed = $true } }
-
-  if (-Not $python3_installed) {
+ 
+  if (-Not $(Find-Python)) {
     Write-Host "Python was missing. Install python $version..." -ForegroundColor Magenta
     Start-Process $python_download_path -ArgumentList @('/quiet', "InstallAllUsers=1 PrependPath=1 Include_test=0") -Wait
   }
