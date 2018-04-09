@@ -6,6 +6,9 @@ provisioner:
   name: shell
   script: ./scripts/install.ps1
 
+verifier:
+  name: inspec
+
 platforms:
   - name: windows-2012R2
     driver_config:
@@ -26,3 +29,6 @@ suites:
     run_list:
     attributes:
       dev_mode: true
+    verifier:
+      inspec_tests:
+        - test/smoke/default
