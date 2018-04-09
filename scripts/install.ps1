@@ -197,10 +197,11 @@ function Install-Python {
 
 function Install-Sphinx {
   $easy_install_exe_path = "$env:PROGRAMFILES\Python36\Scripts\easy_install.exe"
-  Start-Process $easy_install_exe_path -ArgumentList @('sphinx') -Wait
+  Start-Process easy_install.exe -ArgumentList @('sphinx') -Wait
 }
 
 # Start
 Install-Python
+$env:PATH = [Environment]::GetEnvironmentVariable("PATH", "Machine")
 Install-Sphinx
 Install-MikTex
