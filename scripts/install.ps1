@@ -164,14 +164,16 @@ function Test-RegistryKeyValue
 }
 
 function Find-Python {
-  $python365IdentifyingNumber = '{B145D381-BCBE-408A-BDFA-0871790EC59D}'
+  $pythonProducts = '{B145D381-BCBE-408A-BDFA-0871790EC59D}','{8FE3FFD1-2F7E-4EBB-A4B7-627E279DA70E}'
   $products = Get-WmiObject -Class Win32_Product
 
   $pythonThere = $false
 
   foreach ($member in $products)
   {
-    if ($member.IdentifyingNumber -eq $python365IdentifyingNumber) { $pythonThere = $true }
+    foreach ($product in $pythonProducts) {
+      if ($member.IdentifyingNumber -eq $product) { $pythonThere = $true; break; }
+    }
   }
 
   return $pythonThere
