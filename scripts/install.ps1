@@ -190,7 +190,7 @@ function Install-Python {
   if (-Not (Test-Path $python_download_path)) {
     (New-Object System.Net.WebClient).DownloadFile($python_download_url, $python_download_path)
   }
- 
+
   if (-Not $(Find-Python)) {
     Write-Host "Python was missing. Install python $version..." -ForegroundColor Magenta
     Start-Process $python_download_path -ArgumentList @('/quiet', "InstallAllUsers=1 PrependPath=1 Include_test=0") -Wait
@@ -203,6 +203,8 @@ function Install-Sphinx {
 }
 
 # Start
+# Need to work with TLSv1.2 also
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls11 -bor [System.Net.SecurityProtocolType]::Tls12;
 Install-Python
 $env:PATH = [Environment]::GetEnvironmentVariable("PATH", "Machine")
 Install-Sphinx
