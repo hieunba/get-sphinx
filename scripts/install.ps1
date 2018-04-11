@@ -164,19 +164,17 @@ function Test-RegistryKeyValue
 }
 
 function Find-Python {
-  $pythonProducts = '{B145D381-BCBE-408A-BDFA-0871790EC59D}','{8FE3FFD1-2F7E-4EBB-A4B7-627E279DA70E}'
-  $products = Get-WmiObject -Class Win32_Product
+  # Check if Python 3.x installed or not
 
-  $pythonThere = $false
+  $currentVersion = (gwmi -Class Win32_Product | Where { $_.Name -match 'Python.*Executables' }).Version
 
-  foreach ($member in $products)
-  {
-    foreach ($product in $pythonProducts) {
-      if ($member.IdentifyingNumber -eq $product) { $pythonThere = $true; break; }
-    }
+  if ($currentVersion -match $pythonVersion.SubString(0,1)) {
+    return $true;
+  } elseif ($currentVersion -match $pythonVersion) {
+    return $true;
+  } else {
+    return $false;
   }
-
-  return $pythonThere
 }
 
 function Install-Python {
@@ -199,13 +197,12 @@ function Install-Python {
 
 function Install-Sphinx {
   $easy_install_exe_path = "$env:PROGRAMFILES\Python36\Scripts\easy_install.exe"
-  Start-Process easy_install.exe -ArgumentList @('sphinx') -Wait
+  Start-Process py -ArgumentList @('-3', '-m easy_install', 'sphinx') -Wait
 }
 
 # Start
 # Need to work with TLSv1.2 also
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls11 -bor [System.Net.SecurityProtocolType]::Tls12;
 Install-Python
-$env:PATH = [Environment]::GetEnvironmentVariable("PATH", "Machine")
 Install-Sphinx
 Install-MikTex
