@@ -197,7 +197,7 @@ function Install-Python {
 
 function Install-Sphinx {
   $easy_install_exe_path = "$env:PROGRAMFILES\Python36\Scripts\easy_install.exe"
-  Start-Process py -ArgumentList @('-3', '-m easy_install', 'sphinx') -Wait
+  Start-Process py -ArgumentList @('-3', '-m pip', 'install sphinx') -Wait
 }
 
 # Start
