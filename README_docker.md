@@ -45,13 +45,13 @@ You must have access to the Powershell with the working directory is 'C:/docs' w
 To make the PDF file, please do the following steps:
 
 ```
-./make.bat latex
+make latex
 ```
 ```
 cd build/latex
 ```
 ```
-latexmk.exe -pdfxe
+latexmk -pdfxe
 ```
 
 After compiling done, you will get your PDF file in 'build/latex' directory.
