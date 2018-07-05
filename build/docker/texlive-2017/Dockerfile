@@ -9,5 +9,6 @@ RUN C:/install_sphinx.ps1
 RUN iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 RUN choco install mingw -y
 RUN cp C:/tools/mingw64/bin/mingw32-make.exe "$env:SYSTEMROOT/make.exe"
+RUN pip install cloud-sptheme==1.9.4
 WORKDIR C:/docs
 CMD ["tlgmr.bat", "--version"]
