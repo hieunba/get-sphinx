@@ -2,6 +2,10 @@
 
 This file is used to list changes made by each version of get sphinx.
 
+## 0.3.0 (2018-07-11)
+
+  - Add Batch Build with the depth level of 1
+
 ## 0.2.2 (2018-07-05)
 
   - Add Cloud Sphinx Theme v1.9.4
