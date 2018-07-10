@@ -34,7 +34,32 @@ This short guide shows how to use the image on Windows. Linux should be the same
 
 After pulling, we can start to compile documents.
 
-Assuming the documents are in _'C:/Users/user/Documents/reStructedText'_, we mount it to new container from pulled image like this:
+Assuming the documents are in _'C:/Users/user/Documents/reStructedText'_ with a directory tree like this:
+
+```
+reStructedText> ls -Attributes Directory | select Name -ExpandProperty Name
+├───AppNote-PTM
+└───total
+
+```
+
+**Batch Build**
+
+We can do a single build by issuing the command:
+
+```
+docker run --rm -it -v C:/Users/user/Documents/reStructedText/AppNote-PTM:C:/docs hieunghiemba/texlive-2017-windows
+```
+
+Or can do a batch build with the following command:
+
+```
+docker run --rm -it -v C:/Users/user/Documents/reStructedText:C:/docs hieunghiemba/texlive-2017-windows
+```
+
+**Build manually?**
+
+And if your directory is mixed of levels of document source, you can build manually with the following steps:
 
 ```
 docker run --rm -it -v C:/Users/user/Documents/reStructedText:C:/docs hieunghiemba/texlive-2017-windows powershell
@@ -42,8 +67,11 @@ docker run --rm -it -v C:/Users/user/Documents/reStructedText:C:/docs hieunghiem
 
 You must have access to the Powershell with the working directory is 'C:/docs' which your documents mounted and stored.
 
-To make the PDF file, please do the following steps:
+Change to appropriate document directory, and start to build:
 
+```
+make clean html
+```
 ```
 make latex
 ```
@@ -59,3 +87,5 @@ After compiling done, you will get your PDF file in 'build/latex' directory.
 ## Note
 
 The Windows image was built natively by Windows platform then it's quite big but you do not have to touch your system like installing libraries, or dependencies, etc.
+
+Please note that the is no _powershell_ at the end of the command for batch building in comparison to manual build.
