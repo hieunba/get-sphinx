@@ -2,6 +2,10 @@
 
 This file is used to list changes made by each version of get sphinx.
 
+## 0.4.0 (2018-07-25)
+
+  - Build single HTTML by default
+
 ## 0.3.1 (2018-07-22)
 
   - Add Batch Build regardless of the depth levels of directories from input source
