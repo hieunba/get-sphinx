@@ -45,7 +45,7 @@ param(
     If (Test-Path $pwd\source) { 
 
         try {
-           make clean html
+           make clean singlehtml
            make latex
            cd build\latex
            latexmk -pdfxe
