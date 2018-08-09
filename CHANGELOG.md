@@ -2,6 +2,11 @@
 
 This file is used to list changes made by each version of get sphinx.
 
+## 0.5.0 (2018-08-10)
+
+  - Add Pandoc converter
+  - Update build sequence to generate docx as well
+
 ## 0.4.0 (2018-07-25)
 
   - Build single HTTML by default
