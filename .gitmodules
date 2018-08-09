@@ -1,0 +1,3 @@
+[submodule "get-sphinx.wiki"]
+	path = get-sphinx.wiki
+	url = git@github.com:hieunba/get-sphinx.wiki.git
