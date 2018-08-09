@@ -12,77 +12,26 @@ This image should work with:
 - Windows Server 2016
 - Linux (see How to get it section)
 
-You can follow this guide [Docker installation](https://docs.docker.com/docker-for-windows/install/) to help to install docker on Windows.
+Please check *_Install Docker for Windows_* section for how to get Docker running.
 
-## How to get it?
+## Quickstart
 
-From Windows Powershell, pull the image with:
-
-```sh
-docker pull hieunghiemba/texlive-2017-windows
-```
-
-Or from terminal in Linux, pull the following image with:
-
-```sh
-docker pull hieunghiemba/texlive-2017
-```
-
-## How to run this?
-
-This short guide shows how to use the image on Windows. Linux should be the same.
-
-After pulling, we can start to compile documents.
-
-Assuming the documents are in _'C:/Users/user/Documents/reStructedText'_ with a directory tree like this:
+To build your documents:
 
 ```
-reStructedText> ls -Attributes Directory | select Name -ExpandProperty Name
-├───AppNote-PTM
-└───total
-
+docker run --rm -it -v C:/path/to/reStructedText:C:/docs hieunghiemba/texlive-2017-windows
 ```
 
-**Batch Build**
+All sub-directories in the source which contains the appropriate contents will be built.
+You can find PDF file _'build/latex'_ of each built directory.
 
-We can do a single build by issuing the command:
+To have more details information, please check *_How to compile documents_* section.
 
-```
-docker run --rm -it -v C:/Users/user/Documents/reStructedText/AppNote-PTM:C:/docs hieunghiemba/texlive-2017-windows
-```
+## Documentation
 
-Or can do a batch build with the following command:
-
-```
-docker run --rm -it -v C:/Users/user/Documents/reStructedText:C:/docs hieunghiemba/texlive-2017-windows
-```
-
-**Build manually?**
-
-And if your directory is mixed of levels of document source, you can build manually with the following steps:
-
-```
-docker run --rm -it -v C:/Users/user/Documents/reStructedText:C:/docs hieunghiemba/texlive-2017-windows powershell
-```
-
-You must have access to the Powershell with the working directory is 'C:/docs' which your documents mounted and stored.
-
-Change to appropriate document directory, and start to build:
-
-```
-make clean html
-```
-```
-make latex
-```
-```
-cd build/latex
-```
-```
-latexmk -pdfxe
-```
-
-After compiling done, you will get your PDF file in 'build/latex' directory.
+- [Install Docker for Windows](https://docs.docker.com/docker-for-windows/install/)
+- [Build from source](https://github.com/hieunba/get-sphinx/wiki/Build-from-source)
+- [How to compile documents](https://github.com/hieunba/get-sphinx/wiki/How-to-compile)
 
 ## Note
 
