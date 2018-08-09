@@ -45,7 +45,11 @@ param(
     If (Test-Path $pwd\source) { 
 
         try {
+           $build_dir = $pwd
            make clean singlehtml
+           cd build\singlehtml
+           pandoc -o index.docx index.html
+           cd $build_dir
            make latex
            cd build\latex
            latexmk -pdfxe
