@@ -1,7 +1,10 @@
 #!/bin/bash
 
 create_output() {
-  echo "Output directory structure here."
+  echo "Creating output location"
+  test -d /docs/output || {
+    mkdir -p /docs/output/PDF
+  }
 }
 
 start_build() {
@@ -19,6 +22,13 @@ start_build() {
       cd "$build_dir"
       make latex
       make latexpdf
+      clear
+      output="/docs/output/${docname}"
+      mkdir -p "${output}"
+      cp -a build/singlehtml/index.html "${output}/${docname}.html"
+      cp -a build/singlehtml/"${docname}.docx" "${output}"
+      cp -a build/latex/*.pdf "${output}"
+      make clean
     else
       printf "Not a valid source.\n"
     fi
