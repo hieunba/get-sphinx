@@ -25,11 +25,12 @@ start_build() {
   done < <(find /docs/ -type d -iname 'source')
 }
 
-
-# if [ -z "$doclist" ] ; then
-#   printf "Document directory seemed empty. Please check mount point.\n"
-#   exit 0
-# fi
+doc_source_input=$(find /docs -type d -iname 'source' 2>/dev/null | wc -l)
 
 # start building
-start_build
+if [ $doc_source_input -eq 0 ]
+then
+  printf "Document source was empty. Please check the volume mountpoint.\n"
+else
+  start_build
+fi
