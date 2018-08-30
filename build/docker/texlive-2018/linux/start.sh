@@ -20,7 +20,6 @@ start_build() {
       cd build/singlehtml
       pandoc -f html -t docx -o "${docname}.docx" index.html
       cd "$build_dir"
-      make latex
       make latexpdf
       clear
       mv build/singlehtml/"${docname}.docx" /docs/output/Doc
