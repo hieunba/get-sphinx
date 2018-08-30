@@ -1,10 +1,10 @@
 #!/bin/bash
 
 create_output() {
-  echo "Creating output location"
-  test -d /docs/output || {
-    mkdir -p /docs/output/PDF
-  }
+  for dir in PDF HTML Doc
+  do
+    test -d /docs/output/$dir || mkdir -p /docs/output/$dir
+  done
 }
 
 start_build() {
@@ -23,11 +23,9 @@ start_build() {
       make latex
       make latexpdf
       clear
-      output="/docs/output/${docname}"
-      mkdir -p "${output}"
-      cp -a build/singlehtml/index.html "${output}/${docname}.html"
-      cp -a build/singlehtml/"${docname}.docx" "${output}"
-      cp -a build/latex/*.pdf "${output}"
+      mv build/singlehtml/"${docname}.docx" /docs/output/Doc
+      mv build/singlehtml /docs/output/HTML/"${docname}"
+      mv build/latex/*.pdf /docs/output/PDF
       make clean
     else
       printf "Not a valid source.\n"
@@ -42,5 +40,6 @@ if [ $doc_source_input -eq 0 ]
 then
   printf "Document source was empty. Please check the volume mountpoint.\n"
 else
+  create_output
   start_build
 fi
