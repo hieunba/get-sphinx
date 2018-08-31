@@ -2,6 +2,11 @@
 
 This file is used to list changes made by each version of get sphinx.
 
+## 0.6.0 (2018-08-31)
+
+  - Dockerfile for texlive 2018 for Windows
+  - Collect artifacts in output in doc source
+
 ## 0.5.0 (2018-08-10)
 
   - Add Pandoc converter
