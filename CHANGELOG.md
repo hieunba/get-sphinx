@@ -2,6 +2,12 @@
 
 This file is used to list changes made by each version of get sphinx.
 
+## 0.6.1 (2018-08-31)
+
+  - Support custom source while building texlive 2017 for Windows
+
+   To set Tex Live source, please add TEXLIVE_SOURCE in build-arg while issuing ` docker build `.
+
 ## 0.6.0 (2018-08-31)
 
   - Dockerfile for texlive 2018 for Windows
