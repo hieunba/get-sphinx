@@ -2,6 +2,10 @@
 
 This file is used to list changes made by each version of get sphinx.
 
+## 0.6.2 (2018-09-20)
+
+  - Clean up old artifacts before building
+
 ## 0.6.1 (2018-08-31)
 
   - Support custom source while building texlive 2017 for Windows
