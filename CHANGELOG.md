@@ -2,6 +2,10 @@
 
 This file is used to list changes made by each version of get sphinx.
 
+## 0.7.0 (2018-09-24)
+
+  - Build filenames with spaces from hats (^)
+
 ## 0.6.2 (2018-09-20)
 
   - Clean up old artifacts before building
