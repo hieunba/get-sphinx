@@ -75,6 +75,7 @@ param(
            make latex
            cd build\latex
            latexmk -pdfxe
+           Get-ChildItem *.pdf | Rename-Item -NewName { $_.Name -Replace '\^',' ' }
            cd $build_dir
            mv "build\singlehtml\$doc_name.docx" "$Docs\output\Doc"
            If (-not (Test-Path "$Docs\output\HTML\$doc_name")) {
