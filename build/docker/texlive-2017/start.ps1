@@ -120,9 +120,41 @@ param(
     }
 }
 
+function clean_with_retries {
+    $stop_try = $false
+    $retry_count = 1
+    $document_source = $args[0]
+    $max_retries = 5
+    $retry_sleep = 10
+    do {
+        try {
+            Remove-Item -Recurse "$document_source" -ErrorVariable $err -ErrorAction Stop
+            Write-Host -ForegroundColor Green "Successfully deleted the old artifacts at $document_source"
+            $stop_try = $true
+        }
+        catch {
+            if ($retry_count -gt $max_retries) {
+                Write-Host -ForegroundColor Cyan "Tried $max_retries times, all failed! Check if any artifact is being used."
+                $stop_try = $true
+                exit 1
+            } else {
+                Write-Host -ForegroundColor Red "Failed to clean up $document_source - retrying after $retry_sleep seconds"
+                Start-Sleep -Seconds $retry_sleep
+                $retry_count = $retry_count + 1
+            }
+        }
+    }
+    while ($stop_try -eq $false)
+}
+
 # start building
 If ([System.IO.File]::Exists($ErrorLog)) {
     Out-Null > $ErrorLog
+}
+If (Test-Path "$Docs\output" ) {
+    Write-Host -ForegroundColor DarkGreen "Cleaning old artifacts.."
+    Write-Host ""
+    clean_with_retries "$Docs\output"
 }
 Start-BatchBuild -BatchList $(Get-DocumentList)
 cd $Docs
