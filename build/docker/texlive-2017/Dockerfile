@@ -15,7 +15,7 @@ RUN cp C:/tools/mingw64/bin/mingw32-make.exe "$env:SYSTEMROOT/make.exe"
 RUN pip install cloud-sptheme==1.9.4
 ENV cloud_conf "C:\Program Files\Python36\Lib\site-packages\cloud_sptheme\themes\cloud\theme.conf"
 RUN (cat $env:cloud_conf).Replace(' //fonts', ' https://fonts') | Set-Content $env:cloud_conf
-ENV PANDOC_SOURCE=https://github.com/jgm/pandoc/releases/download/2.2.3.2/pandoc-2.2.3.2-windows-x86_64.msi
+ARG PANDOC_SOURCE=https://github.com/jgm/pandoc/releases/download/2.2.3.2/pandoc-2.2.3.2-windows-x86_64.msi
 ENV PANDOC_DOWNLOAD_PATH=C:\\pandoc-installer.msi
 RUN [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls11 -bor [System.Net.SecurityProtocolType]::Tls12; `
     (New-Object System.Net.WebClient).DownloadFile($env:PANDOC_SOURCE, $env:PANDOC_DOWNLOAD_PATH)
