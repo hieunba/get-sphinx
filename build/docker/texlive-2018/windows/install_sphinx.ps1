@@ -26,7 +26,14 @@ $arch = $env:PROCESSOR_ARCHITECTURE.ToLower()
 function Find-Python {
   # Check if Python 3.x installed or not
 
-  $currentVersion = (gwmi -Class Win32_Product | Where { $_.Name -match 'Python.*Executables' }).Version
+  # Select the correct command to work with WmiObject
+  # because Get-WmiObject has been deprecated in Powershell Core.
+
+  $currentVersion = if ($PSVersionTable.PSVersion.Major -lt 6) {
+    (gwmi -Class Win32_Product | Where { $_.Name -match 'Python.*Executables' }).Version
+  } else {
+    (gcim -Class Win32_Product | Where { $_.Name -match 'Python.*Executables' }).Version
+  }
 
   if ($currentVersion -match $pythonVersion.SubString(0,1)) {
     return $true;
