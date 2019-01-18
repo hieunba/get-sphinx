@@ -2,6 +2,11 @@
 
 This file is used to list changes made by each version of get sphinx.
 
+## 0.7.1 (2019-01-17)
+
+  - Use gcim to deprecate Get-WmiObject command with Powershell 6 or later (following latest Docker image from Microsoft)
+  - Update PATH to make.exe with new installation from Chocolatey (compatible with old PATH)
+
 ## 0.7.0 (2018-09-24)
 
   - Build filenames with spaces from hats (^)
